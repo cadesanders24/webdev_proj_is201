@@ -24,6 +24,12 @@
   background-color: rgb(251, 246, 247);
 }
 
+.resume_details {
+    font-weight: 500 !important;
+    color:rgb(86, 86, 86);
+    font-size: 16px !important;
+}
+
 .home_color {
       background-color: rgb(251, 246, 247) !important;
 }
@@ -49,7 +55,7 @@
 }
 
 .home_desc {
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 500;
 }
 
@@ -80,6 +86,13 @@ h5 {
 
 .page_back {
     background-color: rgba(165, 42, 42, 0.31);
+}
+
+.music_title {
+    text-align: center;
+    border:2px solid #54372a;
+    width: 600px; 
+    margin: 0 auto; 
 }
 
 .home_button {
