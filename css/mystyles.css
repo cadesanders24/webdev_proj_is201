@@ -32,6 +32,18 @@
     color: #54372a !important;
 }
 
+.scratch_link:link {
+    color: #830062;
+}
+
+.scratch_visited:visited {
+    color: rgb(0, 0, 0);
+}
+
+.scratch_hov:hover {
+    color: red;       /* When mouse is over the link */
+}
+
 .home_details {
     color: rgb(67, 67, 222);
 }
