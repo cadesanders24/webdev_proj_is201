@@ -1,0 +1,102 @@
+
+.header {
+    font-family: "Saira Extra Condensed";
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 24px;
+}
+
+.subheader {
+    font-family: "Saira Extra Condensed";
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 22px;
+    padding-bottom: 16px;
+}
+
+.resume {
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 35px;
+  padding-bottom: 20px;
+  background-color: rgb(251, 246, 247);
+}
+
+.home_color {
+      background-color: rgb(251, 246, 247) !important;
+}
+
+.dates {
+    color: #54372a !important;
+}
+
+.home_details {
+    color: rgb(67, 67, 222);
+}
+
+.home_desc {
+    font-size: 26px;
+    font-weight: 500;
+}
+
+.italicized {
+    font-style: italic;
+}
+
+.text_bigger {
+    font-size: 22px;
+}
+
+h3 {
+    font-size: 28px;
+    text-decoration: underline;
+}
+
+h5 {
+    font-weight: normal;
+}
+
+.ununderline {
+    text-decoration: none;
+}
+
+.padding_bottom {
+    padding-bottom: 30px;
+}
+
+.page_back {
+    background-color: rgba(165, 42, 42, 0.31);
+}
+
+.home_button {
+    position: fixed;
+    bottom: 20px; 
+    left: 50%;
+    transform: translateX(-50%); /* because it just puts the edge at the center */
+    background: rgb(185, 25, 25);
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    z-index: 9999;
+}
+
+.artists-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.artists-grid figure {
+    text-align: center;
+}
+
+.artists-grid img {
+    width: 100%;
+    max-width: 200px;
+    border-radius: 8px;
+}

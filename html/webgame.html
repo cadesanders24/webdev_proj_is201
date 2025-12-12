@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Blackjack Game</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: url(../assets/img/blackjack_table_is201.png);
+        color: white;
+        text-align: center;
+        padding: 40px;
+    }
+
+    #game {
+        background: #14532d;
+        padding: 20px;
+        border-radius: 20px;
+        width: 400px;
+        margin: auto;
+        box-shadow: 0 0 20px black;
+    }
+
+    .hand {
+        font-size: 20px;
+        margin: 15px 0;
+    }
+
+    button {
+        margin: 10px;
+        padding: 12px 18px;
+        font-size: 16px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+    }
+
+    #hit { background: #353fff; }
+    #stand { background: #ef4444; }
+    #restart { background: #22c55e; }
+    #rules-box button {
+        padding: 10px 15px;
+        font-size: 18px;
+        border-radius: 10px;
+        background: #22c55e;
+        border: none;
+        cursor: pointer;
+    }
+
+    button:hover {
+        opacity: .6;
+    }
+
+    h1 {
+        margin-top: 0;
+        font-size: 36px;
+    }
+</style>
+</head>
+
+<body>
+
+<div id="rules-box" style="
+    background:#0f3c22;
+    padding:20px;
+    border-radius:15px;
+    width:400px;
+    margin:auto;
+    box-shadow:0 0 20px black;
+    margin-bottom:20px;
+">
+    <h2>Blackjack Rules</h2>
+    <p>Here are the rules of blackjack:</p>
+    <p>Try to get as close to 21 as you can without going over 21.
+    Jacks, Queens, and Kings are all worth 10. Aces are worth either 1 or 11 depending on which will help you.
+    You are playing against the dealer; you want to get closer to 21 than the dealer without busting.</p>
+    <button onclick="begin()">Start Game</button>
+</div>
+
+<div id="game" style="display:none;">
+    <h1>Blackjack</h1>
+    
+    <div class="hand">
+        <strong>Your Hand:</strong> <span id="player-hand"></span>
+        <br>
+        Total: <span id="player-total"></span>
+    </div>
+
+    <div class="hand">
+        <strong>Dealer's Hand:</strong> <span id="dealer-hand"></span>
+        <br>
+        Total: <span id="dealer-total"></span>
+    </div>
+
+    <p id="message"></p>
+
+    <button id="hit" onclick="hit()">Hit</button>
+    <button id="stand" onclick="stand()">Stand</button>
+    <button id="restart" onclick="startGame()">Play Again</button>
+</div>
+
+<script>
+    let deck = [];
+    let player = [];
+    let dealer = [];
+
+    function createDeck() {
+        const suits = ["♠", "♥", "♦", "♣"];
+        const values = [
+            {v: 2, name: "2"}, {v: 3, name: "3"}, {v: 4, name: "4"}, {v: 5, name: "5"},
+            {v: 6, name: "6"}, {v: 7, name: "7"}, {v: 8, name: "8"}, {v: 9, name: "9"},
+            {v: 10, name: "10"}, {v: 10, name: "J"}, {v: 10, name: "Q"}, {v: 10, name: "K"},
+            {v: 11, name: "A"}
+        ];
+
+        deck = [];
+        for (let s of suits) {
+            for (let val of values) {
+                deck.push({value: val.v, name: val.name + s});
+            }
+        }
+
+        // shuffle
+        for (let i = deck.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            [deck[i], deck[j]] = [deck[j], deck[i]];
+        }
+    }
+
+    function startGame() {
+        createDeck();
+        player = [deck.pop(), deck.pop()];
+        dealer = [deck.pop(), deck.pop()];
+
+        document.getElementById("message").innerText = "";
+        document.getElementById("restart").style.display = "none";
+        document.getElementById("hit").style.display = "inline-block";
+        document.getElementById("stand").style.display = "inline-block";
+
+        updateUI();
+    }
+
+    function handTotal(hand) {
+        let total = 0;
+        let aces = 0;
+
+        for (let card of hand) {
+            total += card.value;
+            if (card.name.startsWith("A")) aces++;
+        }
+
+        while (total > 21 && aces > 0) {
+            total -= 10;
+            aces--;
+        }
+
+        return total;
+    }
+
+    function updateUI(showDealer = false) {
+        document.getElementById("player-hand").innerText =
+            player.map(c => c.name).join(" ");
+
+        document.getElementById("player-total").innerText = handTotal(player);
+
+        if (showDealer) {
+            document.getElementById("dealer-hand").innerText =
+                dealer.map(c => c.name).join(" ");
+            document.getElementById("dealer-total").innerText = handTotal(dealer);
+        } else {
+            // hide dealer's second card
+            document.getElementById("dealer-hand").innerText =
+                dealer[0].name + " [hidden]";
+            document.getElementById("dealer-total").innerText = "Unknown";
+        }
+    }
+
+    function hit() {
+        player.push(deck.pop());
+        updateUI();
+
+        if (handTotal(player) > 21) {
+            endGame("You busted! Dealer wins.");
+        }
+    }
+
+    function stand() {
+        // reveal dealer cards
+        updateUI(true);
+
+        while (handTotal(dealer) < 17) {
+            dealer.push(deck.pop());
+            updateUI(true);
+        }
+
+        let p = handTotal(player);
+        let d = handTotal(dealer);
+
+        if (d > 21) {
+            endGame("Dealer busted! You win!");
+        } else if (p > d) {
+            endGame("You win!");
+        } else if (p < d) {
+            endGame("Dealer wins!");
+        } else {
+            endGame("It's a tie!");
+        }
+    }
+
+    function endGame(msg) {
+        document.getElementById("message").innerText = msg;
+        document.getElementById("hit").style.display = "none";
+        document.getElementById("stand").style.display = "none";
+        document.getElementById("restart").style.display = "inline-block";
+
+        // reveal final dealer hand
+        updateUI(true);
+    }
+
+    function begin() {
+        document.getElementById("rules-box").style.display = "none";
+        document.getElementById("game").style.display = "block";
+        startGame();
+    }
+
+</script>
+
+</body>
+</html>
